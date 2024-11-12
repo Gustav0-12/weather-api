@@ -1,0 +1,31 @@
+services:
+  api:
+    image: gustav012/api-clima:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+      - spring.datasource.url=jdbc:mysql://mysql/demo_clima?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+      - spring.datasource.username=root
+      - spring.datasource.password=123
+      - spring.data.redis.host=redis
+      - spring.data.redis.port=6379
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0.2
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=demo_clima
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
